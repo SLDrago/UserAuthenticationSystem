@@ -1,11 +1,15 @@
 <?php
+require_once 'config.php';
 session_start();
+require_once 'functions.php';
 
 if (isset($_SESSION['username'])) {
     header("Location: welcome.php");
     exit();
 }
-require_once 'functions.php';
+
+// Generate a new CSRF token for the form
+$csrf_token = generateCSRFToken();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +35,7 @@ require_once 'functions.php';
         }
         ?>
         <form action="loginProcess.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
 
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
